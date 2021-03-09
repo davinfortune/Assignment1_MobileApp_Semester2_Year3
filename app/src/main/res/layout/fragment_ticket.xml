@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Ticket">
+    android:layout_height="wrap_content"
+    tools:context=".home.HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/home_r_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="TICKET FRAGMENT" />
+        android:layout_height="500dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="75dp"
+        tools:listitem="@layout/home_primary_cardview" />
+
+    <Button
+        android:id="@+id/addTicket"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Ticket"
+        android:layout_marginTop="250dp"/>
 
 </FrameLayout>

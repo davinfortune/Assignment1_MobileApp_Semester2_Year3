@@ -15,24 +15,35 @@
         >
 
         <ImageView
-            android:layout_marginTop="50dp"
             android:id="@+id/homeCardImage"
-            android:layout_gravity="center_horizontal"
-            android:layout_width="325dp"
-            android:layout_height="220dp"
-            app:srcCompat="@drawable/ic_tickets"
-            android:scaleType="centerCrop"/>
+            android:layout_width="200dp"
+            android:layout_height="221dp"
+            android:layout_gravity="right"
+            android:layout_marginTop="50dp"
+            android:layout_marginRight="15dp"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/mainimage" />
 
         <TextView
             android:id="@+id/homeCardText"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:text="Place Holder"
-            android:layout_marginTop="5dp"
-            android:layout_gravity="center_horizontal"
+            android:text="Kendrick Lamar to Headline Saturday!"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="15dp"
             android:textSize="20sp"
             android:textColor="@color/black"
             android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/homeDescription"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:text="Announced at 1PM last night it is official Kendrick Lamar to Headline Saturday!!"
+            android:textSize="10sp"
+            android:textColor="@color/grey"
+            android:layout_marginTop="125dp"
+            android:layout_marginLeft="15dp"/>
     </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView

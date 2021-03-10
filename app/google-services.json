@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "870441660720",
+    "project_id": "assignment1-5adbb",
+    "storage_bucket": "assignment1-5adbb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:870441660720:android:fc116dbdec54cb7b5b58f5",
+        "android_client_info": {
+          "package_name": "org.com.festivalapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "870441660720-tubsv8mv4c5oaue0hirgi24tfcaquk7a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2UBrVOTKLxdbbmR0p5ErYUKblkGFy3nw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "870441660720-tubsv8mv4c5oaue0hirgi24tfcaquk7a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

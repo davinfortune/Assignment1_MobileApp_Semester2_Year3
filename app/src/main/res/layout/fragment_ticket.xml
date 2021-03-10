@@ -7,19 +7,38 @@
     tools:context=".tickets.TicketFragment"
     android:id="@+id/ticketLayout">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/home_r_view"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="500dp"
-        android:layout_gravity="center_vertical"
-        android:layout_marginTop="75dp"
-        tools:listitem="@layout/home_primary_cardview" />
+        android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/addTicketButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add Ticket"
-        android:layout_marginTop="250dp"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/home_r_view"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="112dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.025"
+            tools:listitem="@layout/home_primary_cardview">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <Button
+            android:id="@+id/addTicketButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="240dp"
+            android:text="Add Ticket"
+            app:layout_constraintBottom_toTopOf="@+id/home_r_view"
+            app:layout_constraintEnd_toStartOf="@+id/home_r_view"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

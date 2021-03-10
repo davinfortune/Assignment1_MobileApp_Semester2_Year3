@@ -1,3 +1,3 @@
 package org.com.festivalapp.tickets
 
-data class TicketItem(val ticketId : String, val name : String, val day: String, val musicType : String )
+data class TicketItem(val ticketId : String, val name : String, val day: String, val musicType : String, val location: String )

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_ticket.*
+import kotlinx.android.synthetic.main.ticket_cardview.*
 import org.com.festivalapp.tickets.TicketAdapter
 import org.com.festivalapp.tickets.TicketItem
 
@@ -29,6 +30,7 @@ class TicketFragment : Fragment(), TicketAdapter.OnTicketClickLister {
         val view = inflater.inflate(R.layout.fragment_ticket, container, false)
 
         val recycler_view : RecyclerView = view.findViewById(R.id.ticket_r_view)
+        recycler_view.setVisibility(View.VISIBLE)
 
         readFromFirebase(recycler_view)
 
@@ -38,6 +40,7 @@ class TicketFragment : Fragment(), TicketAdapter.OnTicketClickLister {
             childFragmentManager.beginTransaction().replace(R.id.ticketLayout, AddTicketFragment()).setTransition(
                 FragmentTransaction.TRANSIT_FRAGMENT_FADE).addToBackStack(null).commit()
             addTicketButton.setVisibility(View.GONE)
+            recycler_view.setVisibility(View.GONE)
         }
         return view
     }
@@ -75,15 +78,15 @@ class TicketFragment : Fragment(), TicketAdapter.OnTicketClickLister {
                 }
                 val ticketClicked : TicketItem = ticketList[pos]
 
-                //Put the value
                 val ldf = TicketDetailsFragment()
                 val args = Bundle()
                 args.putParcelable("sharedTicket",ticketClicked)
+                args.putInt("position",pos)
                 ldf.setArguments(args)
                 childFragmentManager.beginTransaction().replace(R.id.ticketLayout, ldf).setTransition(
                     FragmentTransaction.TRANSIT_FRAGMENT_FADE).addToBackStack(null).commit()
                 addTicketButton.setVisibility(View.GONE)
-
+                ticket_r_view.setVisibility(View.GONE)
             }
         }
     }

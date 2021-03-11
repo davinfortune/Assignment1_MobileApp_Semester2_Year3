@@ -1,3 +1,7 @@
 package org.com.festivalapp.tickets
 
-data class TicketItem(val ticketId : String, val name : String, val day: String, val musicType : String, val location: String )
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
+data class TicketItem( var userName : String, var userDay: String, var musicType : String, var userLocation: String ) : Parcelable

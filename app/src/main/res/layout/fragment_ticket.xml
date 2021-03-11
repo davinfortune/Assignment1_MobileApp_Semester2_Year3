@@ -9,14 +9,15 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="112dp"
+        android:background="@color/white">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/home_r_view"
+            android:id="@+id/ticket_r_view"
             android:layout_width="match_parent"
             android:layout_height="500dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginTop="112dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"

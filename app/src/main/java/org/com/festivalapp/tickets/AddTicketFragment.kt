@@ -30,7 +30,8 @@ class AddTicketFragment : Fragment() {
         goBackButton.setVisibility(View.VISIBLE)
         saveButton.setVisibility(View.VISIBLE)
         goBackButton.setOnClickListener {
-            childFragmentManager.beginTransaction().replace(R.id.addTicketLayout, TicketFragment()).addToBackStack(null).commit()
+            childFragmentManager.beginTransaction().replace(R.id.addTicketLayout, TicketFragment()).setTransition(
+                FragmentTransaction.TRANSIT_FRAGMENT_FADE).addToBackStack(null).commit()
             goBackButton.setVisibility(View.GONE)
             saveButton.setVisibility(View.GONE)
         }
@@ -41,6 +42,11 @@ class AddTicketFragment : Fragment() {
             val userLocation : EditText = view.findViewById(R.id.userLocation)
 
             saveFireStore(userName.text.toString(),userDay.text.toString(),musicType.text.toString(),userLocation.text.toString())
+
+            childFragmentManager.beginTransaction().replace(R.id.addTicketLayout, TicketFragment()).setTransition(
+                FragmentTransaction.TRANSIT_FRAGMENT_FADE).addToBackStack(null).commit()
+            goBackButton.setVisibility(View.GONE)
+            saveButton.setVisibility(View.GONE)
         }
 
         return view

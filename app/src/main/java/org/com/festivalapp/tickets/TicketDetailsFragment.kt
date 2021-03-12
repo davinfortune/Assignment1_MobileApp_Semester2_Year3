@@ -58,14 +58,17 @@ class TicketDetailsFragment : Fragment() {
         }
 
         saveButton.setOnClickListener {
+            val ldf = TicketFragment()
+            val args = Bundle()
+            args.putInt("position",pos)
+            ldf.arguments = args
             updateTicket(
                 userName.text.toString(),
                 userDay.text.toString(),
                 musicType.text.toString(),
                 userLocation.text.toString()
             )
-            parentFragment.removeView
-            childFragmentManager.beginTransaction().replace(R.id.ticketDetailsLayout, TicketFragment()).setTransition(
+            childFragmentManager.beginTransaction().replace(R.id.ticketDetailsLayout, ldf).setTransition(
                     FragmentTransaction.TRANSIT_FRAGMENT_FADE).addToBackStack(null).commit()
             goBackButton.visibility = View.GONE
             saveButton.visibility = View.GONE

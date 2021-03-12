@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="650dp"
     android:id="@+id/addTicketLayout"
-    tools:context=".tickets.TicketFragment">
+    tools:context=".tickets.AddTicketFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

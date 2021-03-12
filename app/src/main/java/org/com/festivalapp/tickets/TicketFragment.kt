@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_ticket.*
+import kotlinx.android.synthetic.main.fragment_ticket.view.*
 import kotlinx.android.synthetic.main.ticket_cardview.*
 import org.com.festivalapp.tickets.TicketAdapter
 import org.com.festivalapp.tickets.TicketItem
@@ -30,30 +31,34 @@ class TicketFragment : Fragment(), TicketAdapter.OnTicketClickLister {
         val view = inflater.inflate(R.layout.fragment_ticket, container, false)
 
         val recycler_view : RecyclerView = view.findViewById(R.id.ticket_r_view)
-        recycler_view.setVisibility(View.VISIBLE)
 
         readFromFirebase(recycler_view)
 
+        recycler_view.visibility = View.VISIBLE
+
+        recycler_view.adapter?.notifyDataSetChanged()
+
         val addTicketButton : Button = view.findViewById(R.id.addTicketButton)
-        addTicketButton.setVisibility(View.VISIBLE)
+        addTicketButton.visibility = View.VISIBLE
         addTicketButton.setOnClickListener {
             childFragmentManager.beginTransaction().replace(R.id.ticketLayout, AddTicketFragment()).setTransition(
                 FragmentTransaction.TRANSIT_FRAGMENT_FADE).addToBackStack(null).commit()
-            addTicketButton.setVisibility(View.GONE)
-            recycler_view.setVisibility(View.GONE)
+            addTicketButton.visibility = View.GONE
+            recycler_view.visibility = View.GONE
         }
         return view
     }
 //    code taken from : https://www.youtube.com/watch?v=5UEdyUFi_uQ
-    private fun readFromFirebase(recycler_View: RecyclerView) : List<TicketItem> {
+    private fun readFromFirebase(recycler_View: RecyclerView) {
         val db = FirebaseFirestore.getInstance()
         val ticketList = ArrayList<TicketItem>()
 
         db.collection("tickets").get().addOnCompleteListener{
             if(it.isSuccessful) {
+                ticketList.clear()
                for(document in it.result!!){
-                   val item = TicketItem(document.data.getValue("userName").toString(), document.data.getValue("userDay").toString(),
-                           document.data.getValue("musicType").toString(), document.data.getValue("userLocation").toString())
+                   val item = TicketItem( document.data.getValue("userName").toString(), document.data.getValue("userDay").toString(),
+                           document.data.getValue("musicType").toString(), document.data.getValue("userLocation").toString() )
                    ticketList += item
                }
                 recycler_View.adapter = TicketAdapter(ticketList, this)
@@ -61,8 +66,9 @@ class TicketFragment : Fragment(), TicketAdapter.OnTicketClickLister {
                 recycler_View.setHasFixedSize(true)
             }
         }
-        return ticketList
     }
+
+
 
     override fun onItemClick(position: Int) {
         val pos = position
@@ -82,12 +88,20 @@ class TicketFragment : Fragment(), TicketAdapter.OnTicketClickLister {
                 val args = Bundle()
                 args.putParcelable("sharedTicket",ticketClicked)
                 args.putInt("position",pos)
-                ldf.setArguments(args)
+                ldf.arguments = args
                 childFragmentManager.beginTransaction().replace(R.id.ticketLayout, ldf).setTransition(
                     FragmentTransaction.TRANSIT_FRAGMENT_FADE).addToBackStack(null).commit()
-                addTicketButton.setVisibility(View.GONE)
-                ticket_r_view.setVisibility(View.GONE)
+                addTicketButton.visibility = View.GONE
+                ticket_r_view.visibility = View.GONE
             }
         }
     }
+
+//    @Override
+//    fun onResume(layout:View){
+//        super.onResume()
+//        layout.ticket_r_view.adapter?.
+//        println("On resume started")
+//    }
+
 }

@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentTransaction
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_ticket.*
+import kotlinx.android.synthetic.main.fragment_ticket_details.*
 import org.com.festivalapp.tickets.TicketItem
 
 
@@ -43,16 +44,19 @@ class TicketDetailsFragment : Fragment() {
 
         val goBackButton : Button = view.findViewById(R.id.goBackButton)
         val saveButton : Button = view.findViewById(R.id.updateTicket)
+        val deleteButton : Button = view.findViewById(R.id.deleteTicketButton)
 
-        goBackButton.setVisibility(View.VISIBLE)
-        saveButton.setVisibility(View.VISIBLE)
+        goBackButton.visibility = View.VISIBLE
+        saveButton.visibility = View.VISIBLE
+
         goBackButton.setOnClickListener {
-            childFragmentManager.beginTransaction().replace(R.id.ticketDetailsLayout, TicketFragment()).addToBackStack(
-                null
-            ).commit()
-            goBackButton.setVisibility(View.GONE)
-            saveButton.setVisibility(View.GONE)
+            childFragmentManager.beginTransaction().replace(R.id.ticketDetailsLayout, TicketFragment()).setTransition(
+                    FragmentTransaction.TRANSIT_FRAGMENT_FADE).addToBackStack(null).commit()
+            goBackButton.visibility = View.GONE
+            saveButton.visibility = View.GONE
+            deleteTicketButton.visibility = View.GONE
         }
+
         saveButton.setOnClickListener {
             updateTicket(
                 userName.text.toString(),
@@ -60,12 +64,21 @@ class TicketDetailsFragment : Fragment() {
                 musicType.text.toString(),
                 userLocation.text.toString()
             )
+            parentFragment.removeView
+            childFragmentManager.beginTransaction().replace(R.id.ticketDetailsLayout, TicketFragment()).setTransition(
+                    FragmentTransaction.TRANSIT_FRAGMENT_FADE).addToBackStack(null).commit()
+            goBackButton.visibility = View.GONE
+            saveButton.visibility = View.GONE
+            deleteTicketButton.visibility = View.GONE
+        }
 
-            childFragmentManager.beginTransaction().replace(R.id.ticketDetailsLayout, TicketFragment()).addToBackStack(
-                null
-            ).commit()
-            goBackButton.setVisibility(View.GONE)
-            saveButton.setVisibility(View.GONE)
+        deleteButton.setOnClickListener {
+            deleteTicket()
+            childFragmentManager.beginTransaction().replace(R.id.ticketDetailsLayout, TicketFragment()).setTransition(
+                    FragmentTransaction.TRANSIT_FRAGMENT_FADE).addToBackStack(null).commit()
+            goBackButton.visibility = View.GONE
+            saveButton.visibility = View.GONE
+            deleteTicketButton.visibility = View.GONE
         }
 
         return view
@@ -88,6 +101,24 @@ class TicketDetailsFragment : Fragment() {
                                       "userDay", userDay,
                                 "musicType", musicType,
                                 "userLocation", userLocation )
+                    }
+                    x += 1
+                }
+            }
+        }
+    }
+
+    private fun deleteTicket(){
+        val db = FirebaseFirestore.getInstance()
+        db.collection("tickets").get().addOnCompleteListener{
+            if(it.isSuccessful) {
+                var x = 0
+                for(document in it.result!!){
+                    if (x == pos) {
+//                        code taken and change from : https://github.com/mitchtabian/FirestoreGettingStarted/blob/Updating_Data_End/app/src/main/java/codingwithmitch/com/firestoregettingstarted/MainActivity.java
+                        val id : String = document.id
+                        val ticketRef : DocumentReference =  db.collection("tickets").document(id)
+                        ticketRef.delete()
                     }
                     x += 1
                 }

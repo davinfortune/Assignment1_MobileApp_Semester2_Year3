@@ -14,36 +14,15 @@
         app:cardElevation="0dp"
         >
 
-        <ImageView
-            android:id="@+id/homeCardImage"
-            android:layout_width="200dp"
-            android:layout_height="221dp"
-            android:layout_gravity="right"
-            android:layout_marginTop="50dp"
-            android:layout_marginRight="15dp"
-            android:scaleType="centerCrop"
-            app:srcCompat="@drawable/mainimage" />
-
         <TextView
-            android:id="@+id/homeCardText"
-            android:layout_width="150dp"
+            android:id="@+id/loginMover"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Kendrick Lamar to Headline Saturday!"
-            android:layout_marginTop="50dp"
-            android:layout_marginLeft="15dp"
-            android:textSize="20sp"
-            android:textColor="@color/black"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:id="@+id/homeDescription"
-            android:layout_width="125dp"
-            android:layout_height="wrap_content"
-            android:text="Announced at 1PM last night it is official Kendrick Lamar to Headline Saturday!!"
-            android:textSize="10sp"
-            android:textColor="@color/grey"
-            android:layout_marginTop="125dp"
-            android:layout_marginLeft="15dp"/>
+            android:layout_marginLeft="25dp"
+            android:text="Login"
+            android:textColor="@color/colorPrimary"
+            android:textSize="48sp"
+            android:textStyle="bold" />
     </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView

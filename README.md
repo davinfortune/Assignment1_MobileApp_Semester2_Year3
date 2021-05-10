@@ -1,4 +1,4 @@
-#Davin Fortunes Assignment 1
+#Davin Fortunes Assignment 2
 
 This is my festival app for assignment 1, I ran tight on time so not all features
 are implemented or work as intended

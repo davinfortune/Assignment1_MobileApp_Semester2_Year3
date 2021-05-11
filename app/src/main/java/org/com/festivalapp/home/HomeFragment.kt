@@ -1,21 +1,19 @@
 package org.com.festivalapp.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.com.festivalapp.MainActivity
 import org.com.festivalapp.R
+import org.com.festivalapp.users.LoginActivity
 
-/**
- * A simple [Fragment] subclass.
- * Use the [HomeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 
 class HomeFragment : Fragment() {
 
@@ -31,6 +29,12 @@ class HomeFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_home, container, false)
         val recycler_view : RecyclerView = view.findViewById(R.id.home_r_view)
+        val LoginText : TextView = view.findViewById(R.id.loginMover)
+
+        LoginText.setOnClickListener {
+            val intent = Intent(activity, LoginActivity::class.java)
+            startActivity(intent)
+        }
 
         recycler_view.adapter = HomeAdapter(homeList)
         recycler_view.layoutManager = LinearLayoutManager(activity)

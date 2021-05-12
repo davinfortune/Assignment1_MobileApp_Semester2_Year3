@@ -21,7 +21,7 @@
             android:layout_marginLeft="25dp"
             android:text="Login"
             android:textColor="@color/colorPrimary"
-            android:textSize="48sp"
+            android:textSize="24sp"
             android:textStyle="bold" />
     </androidx.cardview.widget.CardView>
 

@@ -72,7 +72,7 @@ class RegistrationActivity: AppCompatActivity() {
                  println(it)
                  Toast.makeText(
                      this@RegistrationActivity,
-                     "Registration Failed",
+                     "Registration Failed, Make Sure to Enter a Valid Email",
                      Toast.LENGTH_LONG
                  ).show()
              }

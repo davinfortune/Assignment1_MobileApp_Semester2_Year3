@@ -16,16 +16,13 @@ import java.lang.Exception
 
 class RegistrationActivity: AppCompatActivity() {
     lateinit var auth: FirebaseAuth
-    var databaseReference : DatabaseReference? = null
-    var database : FirebaseDatabase? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
         auth = FirebaseAuth.getInstance()
-        database = FirebaseDatabase.getInstance()
-        databaseReference = database?.reference!!.child("profile")
 
 
         register()
@@ -57,9 +54,10 @@ class RegistrationActivity: AppCompatActivity() {
              if (it.isSuccessful) {
                  println("\n" + "ITS IS SUCCESSFUL" + "\n")
                  val currentUser = auth.currentUser
-                 val currentUserDb = databaseReference?.child((currentUser?.uid!!))
-                 currentUserDb?.child("firstname")?.setValue(firstNameInput.text.toString())
-                 currentUserDb?.child("lastname")?.setValue(lastNameInput.text.toString())
+//                 val currentUserDb = databaseReference?.child((currentUser?.uid!!))
+//                 currentUserDb?.child("firstname")?.setValue(firstNameInput.text.toString())
+//                 currentUserDb?.child("lastname")?.setValue(lastNameInput.text.toString())
+                 saveFireStore(currentUser?.uid!!.toString(),firstNameInput.text.toString(),lastNameInput.text.toString())
 
                  Toast.makeText(
                      this@RegistrationActivity,
@@ -83,5 +81,20 @@ class RegistrationActivity: AppCompatActivity() {
 
 
         }
+    }
+
+    fun saveFireStore(userId : String, firstname: String, lastname : String){
+        val db = FirebaseFirestore.getInstance()
+        val profile : MutableMap<String, Any> = HashMap()
+        profile["userId"] = userId
+        profile["firstname"] = firstname
+        profile["lastname"] = lastname
+        db.collection("profiles").add(profile)
+            .addOnSuccessListener {
+                println("record added successfully ")
+            }
+            .addOnFailureListener {
+                println("record not added")
+            }
     }
 }

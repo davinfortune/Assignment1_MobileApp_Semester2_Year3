@@ -96,7 +96,7 @@ class TicketFragment : Fragment(), TicketAdapter.OnTicketClickLister {
             if(it.isSuccessful) {
                 ticketList.clear()
                for(document in it.result!!){
-                   val item = TicketItem( document.data.getValue("userName").toString(), document.data.getValue("userDay").toString(),
+                   val item = TicketItem( document.data.getValue("userId").toString(),document.data.getValue("userName").toString(), document.data.getValue("userDay").toString(),
                            document.data.getValue("musicType").toString(), document.data.getValue("userLocation").toString() )
                    ticketList += item
                    searchList += item
@@ -119,7 +119,7 @@ class TicketFragment : Fragment(), TicketAdapter.OnTicketClickLister {
         db.collection("tickets").get().addOnCompleteListener{
             if(it.isSuccessful) {
                 for(document in it.result!!){
-                    val item = TicketItem(document.data.getValue("userName").toString(), document.data.getValue("userDay").toString(),
+                    val item = TicketItem(document.data.getValue("userId").toString(),document.data.getValue("userName").toString(), document.data.getValue("userDay").toString(),
                             document.data.getValue("musicType").toString(), document.data.getValue("userLocation").toString())
                     ticketList += item
                 }

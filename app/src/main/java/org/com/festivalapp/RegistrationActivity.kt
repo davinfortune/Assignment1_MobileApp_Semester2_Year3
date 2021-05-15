@@ -1,21 +1,26 @@
 package org.com.festivalapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_register.*
-import org.com.festivalapp.R
-import java.lang.Exception
+
+const val RC_SIGN_IN = 123
 
 class RegistrationActivity: AppCompatActivity() {
     lateinit var auth: FirebaseAuth
+    lateinit var googleSignInClient: GoogleSignInClient
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +34,17 @@ class RegistrationActivity: AppCompatActivity() {
     }
 //    TUTORIAL USED : https://www.youtube.com/watch?v=lS3EOKshtyM&t=349s
     private fun register() {
+
+    registerGoogle.setOnClickListener {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        googleSignIn()
+    }
 
         registerButton.setOnClickListener {
             if(TextUtils.isEmpty(firstNameInput.text.toString())){
@@ -83,7 +99,7 @@ class RegistrationActivity: AppCompatActivity() {
         }
     }
 
-    fun saveFireStore(userId : String, firstname: String, lastname : String){
+    private fun saveFireStore(userId : String, firstname: String, lastname : String){
         val db = FirebaseFirestore.getInstance()
         val profile : MutableMap<String, Any> = HashMap()
         profile["userId"] = userId
@@ -96,5 +112,56 @@ class RegistrationActivity: AppCompatActivity() {
             .addOnFailureListener {
                 println("record not added")
             }
+    }
+
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            println("ABOUT TO LAUNCH HANDLE SIGN IN RESULT")
+            handleSignInResult(task)
+        }
+    }
+
+
+    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
+        println("INSIDE HANDLE SIGN IN RESULT")
+//        try {
+
+
+            val account = completedTask.getResult(ApiException::class.java)
+            println("INSIDE TRY CATCH AND ACCOUNT VARIABLE FILLED")
+            var fullname = account?.displayName
+            val idx = fullname!!.lastIndexOf(' ')
+            require(idx != -1) { "Only a single name: $fullname" }
+            val firstName = fullname.substring(0, idx)
+            val lastName = fullname.substring(idx + 1)
+            saveFireStore(account?.id.toString(),firstName,lastName)
+
+//        } catch (e: ApiException) {
+//            println("No Account")
+//        }
+
+    }
+
+    fun googleSignIn(){
+
+        val signInIntent = googleSignInClient.signInIntent
+        startActivityForResult(signInIntent, RC_SIGN_IN)
+
+
+        var acct : GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this@RegistrationActivity)
+        if (acct != null){
+            var fullname = acct.displayName
+            val idx = fullname!!.lastIndexOf(' ')
+            require(idx != -1) { "Only a single name: $fullname" }
+            val firstName = fullname.substring(0, idx)
+            val lastName = fullname.substring(idx + 1)
+            saveFireStore(acct.id.toString(),firstName,lastName)
+        }
     }
 }

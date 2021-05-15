@@ -24,7 +24,6 @@ class MainActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
         openFragment(HomeFragment())
         bottomNav.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener { item ->

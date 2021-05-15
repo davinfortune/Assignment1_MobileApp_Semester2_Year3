@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "870441660720-a3e940m6rphdv4ik691q3useggr1tn00.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.com.festivalapp",
+            "certificate_hash": "ee83c02fced9ab152f6d5cee4233e7198da3273d"
+          }
+        },
+        {
           "client_id": "870441660720-tubsv8mv4c5oaue0hirgi24tfcaquk7a.apps.googleusercontent.com",
           "client_type": 3
         }

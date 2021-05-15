@@ -15,11 +15,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_home.view.*
 import org.com.festivalapp.R
 import org.com.festivalapp.LoginActivity
 import org.com.festivalapp.User
 import org.com.festivalapp.tickets.TicketAdapter
 import org.com.festivalapp.tickets.TicketItem
+import java.lang.Exception
 
 
 class HomeFragment : Fragment() {
@@ -34,11 +36,6 @@ class HomeFragment : Fragment() {
 
         if (auth.currentUser != null){
             loadProfile()
-        } else {
-            loginMover.setOnClickListener {
-                val intent = Intent(activity, LoginActivity::class.java)
-                startActivity(intent)
-            }
         }
     }
 
@@ -55,6 +52,11 @@ class HomeFragment : Fragment() {
         recycler_view.adapter = HomeAdapter(homeList)
         recycler_view.layoutManager = LinearLayoutManager(activity)
         recycler_view.setHasFixedSize(true)
+
+        view.loginMover.setOnClickListener {
+            val intent = Intent(activity, LoginActivity::class.java)
+            startActivity(intent)
+        }
         return view
 
 
@@ -72,30 +74,36 @@ class HomeFragment : Fragment() {
     }
 
     private fun loadProfile() {
-        val user = auth.currentUser
+        try {
+            val user = auth.currentUser
 
-        val db = FirebaseFirestore.getInstance()
+            val db = FirebaseFirestore.getInstance()
 
-        db.collection("profiles").get().addOnCompleteListener{
-            if(it.isSuccessful) {
-                for(document in it.result!!){
-                    if(document.data.getValue("userId").toString() == user?.uid.toString()) {
-                        User = User(
-                            document.data.getValue("userId").toString(),
-                            user.email,
-                            document.data.getValue("firstname").toString(),
-                            document.data.getValue("lastname").toString()
-                        )
+            db.collection("profiles").get().addOnCompleteListener {
+                if (it.isSuccessful) {
+                    for (document in it.result!!) {
+                        if (document.data.getValue("userId").toString() == user?.uid.toString()) {
+                            User = User(
+                                document.data.getValue("userId").toString(),
+                                user.email,
+                                document.data.getValue("firstname").toString(),
+                                document.data.getValue("lastname").toString()
+                            )
+                        }
                     }
-                }
-                Toast.makeText(
-                    activity,
-                    "Welcome, " + User.firstname,
-                    Toast.LENGTH_LONG
-                ).show()
+                    Toast.makeText(
+                        activity,
+                        "Welcome, " + User.firstname,
+                        Toast.LENGTH_LONG
+                    ).show()
 
-                loginMover.text = "Welcome, \n             " + User.firstname
+
+                    loginMover.text = "Welcome, \n             " + User.firstname
+                }
             }
+        }
+        catch (e : Exception) {
+            print("Unable to login")
         }
     }
 

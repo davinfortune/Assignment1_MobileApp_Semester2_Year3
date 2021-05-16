@@ -22,6 +22,7 @@ class AddTicketFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
+        loadProfile()
     }
 
     override fun onCreateView(
@@ -45,9 +46,8 @@ class AddTicketFragment : Fragment() {
             val userDay : EditText = view.findViewById(R.id.userDay)
             val musicType : EditText = view.findViewById(R.id.musicType)
             val userLocation : EditText = view.findViewById(R.id.userLocation)
-
             try {
-                loadProfile()
+
                 saveFireStore(
                     userDay.text.toString(),
                     musicType.text.toString(),

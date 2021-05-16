@@ -85,6 +85,7 @@ class RegistrationActivity: AppCompatActivity() {
                      "Registration Success",
                      Toast.LENGTH_LONG
                  ).show()
+                 startActivity(Intent(this@RegistrationActivity, MainActivity::class.java))
                  finish()
              }
              else {

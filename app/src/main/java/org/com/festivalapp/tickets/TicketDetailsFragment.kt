@@ -6,8 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_ticket.*
@@ -18,10 +20,12 @@ import org.com.festivalapp.tickets.TicketItem
 class TicketDetailsFragment : Fragment() {
 
     var pos : Int = 0
+    lateinit var auth: FirebaseAuth
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        auth = FirebaseAuth.getInstance()
     }
 
     override fun onCreateView(
@@ -37,6 +41,7 @@ class TicketDetailsFragment : Fragment() {
         val userDay : EditText = view.findViewById(R.id.userDay)
         val musicType : EditText = view.findViewById(R.id.musicType)
         val userLocation : EditText = view.findViewById(R.id.userLocation)
+        val userId : String = sharedTicket?.userId.toString()
         userName.setText(sharedTicket?.userName)
         userDay.setText(sharedTicket?.userDay)
         musicType.setText(sharedTicket?.musicType)
@@ -63,6 +68,7 @@ class TicketDetailsFragment : Fragment() {
             args.putInt("position",pos)
             ldf.arguments = args
             updateTicket(
+                userId,
                 userName.text.toString(),
                 userDay.text.toString(),
                 musicType.text.toString(),
@@ -76,7 +82,7 @@ class TicketDetailsFragment : Fragment() {
         }
 
         deleteButton.setOnClickListener {
-            deleteTicket()
+            deleteTicket(userId)
             childFragmentManager.beginTransaction().replace(R.id.ticketDetailsLayout, TicketFragment()).setTransition(
                     FragmentTransaction.TRANSIT_FRAGMENT_FADE).addToBackStack(null).commit()
             goBackButton.visibility = View.GONE
@@ -88,44 +94,60 @@ class TicketDetailsFragment : Fragment() {
     }
 
     //    code got from : https://www.youtube.com/watch?v=5UEdyUFi_uQ
-    private fun updateTicket(userName: String, userDay: String, musicType: String, userLocation: String){
+    private fun updateTicket(userId:String,userName: String, userDay: String, musicType: String, userLocation: String){
         val db = FirebaseFirestore.getInstance()
-
-        db.collection("tickets").get().addOnCompleteListener{
-            if(it.isSuccessful) {
-                var x = 0
-                for(document in it.result!!){
-                    if (x == pos) {
+        if (userId == auth.currentUser.uid) {
+            db.collection("tickets").get().addOnCompleteListener {
+                if (it.isSuccessful) {
+                    var x = 0
+                    for (document in it.result!!) {
+                        if (x == pos) {
 //                        code taken and change from : https://github.com/mitchtabian/FirestoreGettingStarted/blob/Updating_Data_End/app/src/main/java/codingwithmitch/com/firestoregettingstarted/MainActivity.java
-                          val id : String = document.id
-                          val ticketRef : DocumentReference =  db.collection("tickets").document(id)
-                        ticketRef.update(
+                            val id: String = document.id
+                            val ticketRef: DocumentReference = db.collection("tickets").document(id)
+                            ticketRef.update(
                                 "userName", userName,
-                                      "userDay", userDay,
+                                "userDay", userDay,
                                 "musicType", musicType,
-                                "userLocation", userLocation )
+                                "userLocation", userLocation
+                            )
+                        }
+                        x += 1
                     }
-                    x += 1
                 }
             }
+        } else {
+            Toast.makeText(
+                activity,
+                "You did not create this ticket!",
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 
-    private fun deleteTicket(){
+    private fun deleteTicket(userId: String){
         val db = FirebaseFirestore.getInstance()
-        db.collection("tickets").get().addOnCompleteListener{
-            if(it.isSuccessful) {
-                var x = 0
-                for(document in it.result!!){
-                    if (x == pos) {
+        if (userId == auth.currentUser.uid) {
+            db.collection("tickets").get().addOnCompleteListener {
+                if (it.isSuccessful) {
+                    var x = 0
+                    for (document in it.result!!) {
+                        if (x == pos) {
 //                        code taken and change from : https://github.com/mitchtabian/FirestoreGettingStarted/blob/Updating_Data_End/app/src/main/java/codingwithmitch/com/firestoregettingstarted/MainActivity.java
-                        val id : String = document.id
-                        val ticketRef : DocumentReference =  db.collection("tickets").document(id)
-                        ticketRef.delete()
+                            val id: String = document.id
+                            val ticketRef: DocumentReference = db.collection("tickets").document(id)
+                            ticketRef.delete()
+                        }
+                        x += 1
                     }
-                    x += 1
                 }
             }
+        } else {
+            Toast.makeText(
+                activity,
+                "You did not create this ticket!",
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 }

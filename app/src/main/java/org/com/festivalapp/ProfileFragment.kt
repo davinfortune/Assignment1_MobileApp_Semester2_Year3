@@ -1,6 +1,7 @@
 package org.com.festivalapp
 
 import android.content.Intent
+import android.icu.number.NumberFormatter.with
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 
@@ -60,7 +62,7 @@ class ProfileFragment : Fragment() {
 
                 fullname.text = User.firstname + " " + User.lastname
                 email.text = User.email
-                Picasso.with(this).load(personPhoto).into(/*yourimage view id*/)
+                Picasso.get().load(auth.currentUser.photoUrl).into(profilepic)
 
             }
         }

@@ -1,5 +1,6 @@
 package org.com.festivalapp
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -33,6 +34,8 @@ class ProfileFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
         view.signouttext.setOnClickListener {
             auth.signOut()
+            val intent = Intent(activity, MainActivity::class.java)
+            startActivity(intent)
         }
         return view
     }
@@ -57,6 +60,7 @@ class ProfileFragment : Fragment() {
 
                 fullname.text = User.firstname + " " + User.lastname
                 email.text = User.email
+                Picasso.with(this).load(personPhoto).into(/*yourimage view id*/)
 
             }
         }

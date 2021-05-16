@@ -10,12 +10,17 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_register.*
 
-const val RC_SIGN_IN = 123
+
+private const val RC_SIGN_IN = 123
 
 class RegistrationActivity: AppCompatActivity() {
     lateinit var auth: FirebaseAuth
@@ -140,7 +145,29 @@ class RegistrationActivity: AppCompatActivity() {
             require(idx != -1) { "Only a single name: $fullname" }
             val firstName = fullname.substring(0, idx)
             val lastName = fullname.substring(idx + 1)
-            saveFireStore(account?.id.toString(),firstName,lastName)
+
+            val db = FirebaseFirestore.getInstance()
+
+            db.collection("profiles").get().addOnCompleteListener{
+                var userExists = false
+                if(it.isSuccessful) {
+                    for(document in it.result!!){
+                        if (document.data.getValue("userId").toString() == account?.id.toString()) {
+                            userExists = true
+                        }
+                    }
+                }
+                if (!userExists) {
+                    saveFireStore(account?.id.toString(),firstName,lastName)
+                }
+                firebaseAuthWithGoogle(account?.idToken.toString())
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+
+
+            }
+
+
 
 //        } catch (e: ApiException) {
 //            println("No Account")
@@ -153,15 +180,19 @@ class RegistrationActivity: AppCompatActivity() {
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
 
+    }
 
-        var acct : GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this@RegistrationActivity)
-        if (acct != null){
-            var fullname = acct.displayName
-            val idx = fullname!!.lastIndexOf(' ')
-            require(idx != -1) { "Only a single name: $fullname" }
-            val firstName = fullname.substring(0, idx)
-            val lastName = fullname.substring(idx + 1)
-            saveFireStore(acct.id.toString(),firstName,lastName)
-        }
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(this,
+                OnCompleteListener<AuthResult?> { task ->
+                    if (task.isSuccessful) {
+
+                        val user: FirebaseUser = auth.getCurrentUser()
+                    } else {
+                        println("unable to add user")
+                    }
+                })
     }
 }
